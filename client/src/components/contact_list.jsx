@@ -5,17 +5,18 @@ class ContactList extends React.Component {
 	constructor(props) {
 		super();
 		this.state = {
-			error: false,
-			errorMessage: "",
-			showNewContactForm: false,
-			showDetails: false,
-			editDetails: false,
 			contacts: [],
 			first_name: "",
 			last_name: "",
 			email: "",
 			phone_number: "",
 			selectedContact: "",
+			showDetails: false,
+			editDetails: false,
+			showNewContactForm: false,
+			// handling errors
+			error: false,
+			apiMessage: "",
 		};
 	}
 
@@ -29,10 +30,11 @@ class ContactList extends React.Component {
 			.then(response => {
 				this.setState({
 					contacts: response.data,
+					// might remove this
+					apiMessage: response.message,
 				});
 			})
 			.catch(() => {
-				// currently catching "server down" error
 				this.setState({ error: true });
 			});
 	}
@@ -82,7 +84,7 @@ class ContactList extends React.Component {
 			.then(() => {
 				this.getAllContacts();
 			})
-			// fix error handling and check uniqueness of email and edge case without "required" on client side
+			// work on error handling, check uniqueness of email and edge case without "required" on client side
 			.catch(error => {
 				console.log("error", error.response);
 			});
@@ -108,20 +110,30 @@ class ContactList extends React.Component {
 		});
 	};
 
-	handleEditContact = id => {
-		this.setState({
-			editDetails: true,
-		});
-	};
+	// IN PROGRESS
+	// handleEditContact = id => {
+	// 	this.setState({
+	// 		editDetails: true,
+	// 	});
+	// };
 
+	// MISSING HANDLING FORM AND INPUT CHANGE BEFORE EDIT/FETCH FUNCTION
+	// this.editContact(id);
+
+	// IN PROGRESS
 	// editContact = id => {
+	// 	const { first_name, last_name, email, phone_number } = this.state;
+
 	// 	fetch(`/api/v1/contact/${id}`, {
 	// 		method: "PUT",
 	// 		headers: {
 	// 			"Content-Type": "application/json",
 	// 		},
 	// 		body: JSON.stringify({
-	// 			complete: 1,
+	// 			first_name: first_name,
+	// 			last_name: last_name,
+	// 			email: email,
+	// 			phone_number: phone_number,
 	// 		}),
 	// 	})
 	// 		.then(response => response.json())
