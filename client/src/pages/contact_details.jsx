@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+// import DeleteContact from "../components/delete_contact";
 
 class ContactDetails extends React.Component {
 	constructor(props) {
@@ -16,6 +17,7 @@ class ContactDetails extends React.Component {
 			showEditContactForm: false,
 			selectedField: "",
 			newValue: "",
+			// deleteContact: false,
 		};
 	}
 
@@ -152,6 +154,12 @@ class ContactDetails extends React.Component {
 			});
 	};
 
+	// handleDeleteContact = () => {
+	// 	this.setState({
+	// 		deleteContact: true,
+	// 	});
+	// };
+
 	handleDeleteContact = id => {
 		this.deleteContact(id);
 	};
@@ -183,6 +191,7 @@ class ContactDetails extends React.Component {
 			showEditContactForm,
 			selectedField,
 			newValue,
+			// deleteContact,
 		} = this.state;
 		return (
 			<div>
@@ -204,6 +213,7 @@ class ContactDetails extends React.Component {
 						>
 							Delete
 						</button>
+						{/* {deleteContact && <DeleteContact id={selectedContact.id} />} */}
 					</div>
 				)}
 				<div>
