@@ -3,18 +3,18 @@ module Api
     class ContactsController < ApplicationController
       def index
         contacts = Contact.order('first_name ASC')
-        render json: { status: 'Sucess', message: 'Contacts loaded correctly', data: contacts }, status: :ok
+        render json: { status: 'Success', message: 'Contacts loaded correctly', data: contacts }, status: :ok
       end
 
       def show
         contact = Contact.find(params[:id])
-        render json: { status: 'Sucess', message: 'Contact loaded correctly', data: contact }, status: :ok
+        render json: { status: 'Success', message: 'Contact loaded correctly', data: contact }, status: :ok
       end
 
       def create
         contact = Contact.new(contact_params)
         if contact.save
-          render json: { status: 'Sucess', message: 'Contacted saved in the database', data: contact }, status: :ok
+          render json: { status: 'Success', message: 'Contacted saved in the database', data: contact }, status: :ok
         else
           render json: { status: 'Error', message: 'Contact not saved in the database', data: contact.errors }, status: :unprocessable_entity
         end
@@ -23,7 +23,7 @@ module Api
       def update
         contact = Contact.find(params[:id])
         if contact.update(contact_params)
-          render json: { status: 'Sucess', message: 'Contact updated in the database', data: contact }, status: :ok
+          render json: { status: 'Success', message: 'Contact updated in the database', data: contact }, status: :ok
         else
           render json: { status: 'Error', message: 'Contact not updatedin the database', data: contact.errors }, status: :unprocessable_entity
         end
@@ -32,7 +32,7 @@ module Api
       def destroy
         contact = Contact.find(params[:id])
         contact.destroy
-        render json: { status: 'Sucess', message: 'Contact deleted from database', data: contact }, status: :ok
+        render json: { status: 'Success', message: 'Contact deleted from database', data: contact }, status: :ok
       end
 
       private
