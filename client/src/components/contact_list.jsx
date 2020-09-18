@@ -11,12 +11,14 @@ class ContactList extends React.Component {
 			email: "",
 			phone_number: "",
 			selectedContact: "",
+			selectedField: "",
+			newValue: "",
+			edited_field: "",
 			showDetails: false,
 			editDetails: false,
 			showNewContactForm: false,
-			// handling errors
+			showEditContactForm: false,
 			error: false,
-			apiMessage: "",
 		};
 	}
 
@@ -30,8 +32,6 @@ class ContactList extends React.Component {
 			.then(response => {
 				this.setState({
 					contacts: response.data,
-					// might remove this
-					apiMessage: response.message,
 				});
 			})
 			.catch(() => {
@@ -81,8 +81,14 @@ class ContactList extends React.Component {
 			}),
 		})
 			.then(response => response.json())
-			.then(() => {
-				this.getAllContacts();
+			.then(response => {
+				if (response.status === "Success") {
+					this.getAllContacts();
+				} else {
+					this.setState({
+						error: true,
+					});
+				}
 			})
 			// work on error handling, check uniqueness of email and edge case without "required" on client side
 			.catch(error => {
@@ -99,6 +105,12 @@ class ContactList extends React.Component {
 		});
 	};
 
+	handleCloseForm = () => {
+		this.setState({
+			showNewContactForm: false,
+		});
+	};
+
 	handleShowDetails = id => {
 		const { contacts } = this.state;
 		const selection = contacts.find(contact => {
@@ -110,40 +122,98 @@ class ContactList extends React.Component {
 		});
 	};
 
-	// IN PROGRESS
-	// handleEditContact = id => {
-	// 	this.setState({
-	// 		editDetails: true,
-	// 	});
-	// };
+	// Show field selection form
+	handleEditContact = () => {
+		this.setState({
+			editDetails: true,
+		});
+	};
 
-	// MISSING HANDLING FORM AND INPUT CHANGE BEFORE EDIT/FETCH FUNCTION
-	// this.editContact(id);
+	// Update selected field on state
+	handleEditSelection = event => {
+		const value = event.target.value;
+		this.setState({
+			selectedField: value,
+		});
+	};
 
-	// IN PROGRESS
-	// editContact = id => {
-	// 	const { first_name, last_name, email, phone_number } = this.state;
+	// Show edit form
+	handleEditSubmit = event => {
+		event.preventDefault();
+		this.setState({
+			showEditContactForm: true,
+		});
+	};
 
-	// 	fetch(`/api/v1/contact/${id}`, {
-	// 		method: "PUT",
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({
-	// 			first_name: first_name,
-	// 			last_name: last_name,
-	// 			email: email,
-	// 			phone_number: phone_number,
-	// 		}),
-	// 	})
-	// 		.then(response => response.json())
-	// 		.then(() => {
-	// 			this.getAllContacts();
-	// 		})
-	// 		.catch(() => {
-	// 			this.setState({ error: true });
-	// 		});
-	// };
+	// Edit another field
+	handleRefreshForm = () => {
+		this.setState({
+			showEditContactForm: false,
+		});
+	};
+
+	handleFinalEditSubmit = event => {
+		event.preventDefault();
+		this.editContact();
+		this.setState({
+			first_name: "",
+			last_name: "",
+			email: "",
+			phone_number: "",
+			showDetails: false,
+			editDetails: false,
+			showEditContactForm: false,
+		});
+	};
+
+	editContact = () => {
+		const {
+			first_name,
+			last_name,
+			email,
+			phone_number,
+			selectedContact,
+		} = this.state;
+
+		let field = {};
+
+		if (first_name !== "") {
+			field.key = "first_name";
+			field.value = first_name;
+		}
+		if (last_name !== "") {
+			field.key = "last_name";
+			field.value = last_name;
+		}
+		if (email !== "") {
+			field.key = "email";
+			field.value = email;
+		}
+		if (phone_number !== "") {
+			field.key = "phone_number";
+			field.value = phone_number;
+		}
+
+		const db_key = field.key;
+		const db_value = field.value;
+
+		fetch(`/api/v1/contacts/${selectedContact.id}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				[db_key]: db_value,
+			}),
+		})
+			.then(response => response.json())
+			.then(() => {
+				this.getAllContacts();
+			})
+			.catch(() => {
+				this.setState({ error: true });
+			});
+	};
 
 	handleDeleteContact = id => {
 		this.deleteContact(id);
@@ -171,14 +241,18 @@ class ContactList extends React.Component {
 	render() {
 		const {
 			contacts,
-			errorMessage,
+			error,
 			showNewContactForm,
+			editDetails,
 			first_name,
 			last_name,
 			email,
 			phone_number,
 			showDetails,
 			selectedContact,
+			selectedField,
+			newValue,
+			showEditContactForm,
 		} = this.state;
 
 		return (
@@ -200,14 +274,11 @@ class ContactList extends React.Component {
 				</button>
 				{showDetails && (
 					<div>
-						<p>
-							Name: {selectedContact.first_name} {selectedContact.last_name}{" "}
-						</p>
+						<p>First Name: {selectedContact.first_name} </p>
+						<p>Last Name: {selectedContact.last_name} </p>
 						<p>Email: {selectedContact.email} </p>
 						<p>Phone Number: {selectedContact.phone_number}</p>
-						<button onClick={() => this.handleEditContact(selectedContact.id)}>
-							Edit
-						</button>
+						<button onClick={this.handleEditContact}>Edit</button>
 						<button
 							onClick={() => this.handleDeleteContact(selectedContact.id)}
 						>
@@ -216,8 +287,6 @@ class ContactList extends React.Component {
 					</div>
 				)}
 				<div>
-					<h4>{errorMessage}</h4>
-					<br></br>
 					{showNewContactForm && (
 						<div>
 							<form onSubmit={this.handleSubmit}>
@@ -258,11 +327,60 @@ class ContactList extends React.Component {
 								<button>Submit</button>
 							</form>
 							<button onClick={this.handleClearForm}>Clear</button>
+							<button onClick={this.handleCloseForm}>Close</button>
 						</div>
 					)}
 				</div>
-				{this.state.error && (
-					<p className="error"> Sorry, there has been an error.</p>
+				<div>
+					{editDetails && (
+						<div>
+							<h4>
+								<form onSubmit={this.handleEditSubmit}>
+									What would you like to edit for {selectedContact.first_name}{" "}
+									{selectedContact.last_name}?{" "}
+									<select
+										value={selectedField}
+										onChange={this.handleEditSelection}
+									>
+										<option>SELECT ONE:</option>
+										<option value="first_name">First Name</option>
+										<option value="last_name">Last Name</option>
+										<option value="email">Email</option>
+										<option value="phone_number">Phone Number</option>
+									</select>
+									<button>Edit</button>
+								</form>
+							</h4>
+						</div>
+					)}
+				</div>
+				<div>
+					{showEditContactForm && (
+						<div>
+							<form onSubmit={this.handleFinalEditSubmit}>
+								<label>Edit information:</label>
+								<input
+									type="text"
+									name={selectedField}
+									defaultValue={newValue}
+									onChange={this.handleInputChange}
+									required
+								/>
+								<br></br>
+								<button>Submit</button>
+							</form>
+							<button onClick={this.handleRefreshForm}>
+								Edit another field
+							</button>
+						</div>
+					)}
+				</div>
+				<br></br>
+				{error && (
+					<p className="error">
+						{" "}
+						Sorry, this email is already taken, please try again.
+					</p>
 				)}
 			</div>
 		);

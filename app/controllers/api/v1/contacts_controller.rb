@@ -14,7 +14,7 @@ module Api
       def create
         contact = Contact.new(contact_params)
         if contact.save
-          render json: { status: 'Success', message: 'Contacted saved in the database', data: contact }, status: :ok
+          render json: { status: 'Success', message: 'Contact saved in the database', data: contact }, status: :ok
         else
           render json: { status: 'Error', message: 'Contact not saved in the database', data: contact.errors }, status: :unprocessable_entity
         end
