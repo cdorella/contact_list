@@ -1,16 +1,22 @@
 import React from "react";
 import "./App.css";
-import ContactList from "./components/contact_list";
+import Home from "./pages/home";
+import AllContacts from "./pages/contacts";
+import ContactDetails from "./pages/contact_details";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-class App extends React.Component {
-	render() {
-		return (
-			<div>
-				<h1>Welcome!</h1>
-				<ContactList />
-			</div>
-		);
-	}
+function App() {
+	return (
+		<div>
+			<Router>
+				<Switch>
+					<Route path="/" exact component={Home}></Route>
+					<Route path="/contacts" exact component={AllContacts}></Route>
+					<Route path="/contacts/:id" exact component={ContactDetails}></Route>
+				</Switch>
+			</Router>
+		</div>
+	);
 }
 
 export default App;
