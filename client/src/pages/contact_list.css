@@ -4,7 +4,12 @@
 	font-weight: bold;
 }
 
-.add-new-container {
+.add-new-top-container {
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
+}
+
+.add-new-bottom-container {
+	display: flex;
+	justify-content: center;
 }

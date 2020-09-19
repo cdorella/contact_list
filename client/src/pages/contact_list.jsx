@@ -15,7 +15,9 @@ const ContactList = props => {
 
 	return (
 		<div>
-			<h1 className="contact-list-title">Click for contact details:</h1>
+			<div className="add-new-top-container">
+				<h1 className="contact-list-title">Click for contact details:</h1>
+			</div>
 			{contacts.map(contact => (
 				<ul key={contact.id}>
 					<ListGroup>
@@ -32,7 +34,7 @@ const ContactList = props => {
 				</ul>
 			))}
 
-			<div className="add-new-container">
+			<div className="add-new-bottom-container">
 				<Link to="/contacts/add" className="btn btn-secondary stretched-link">
 					Add New Contact
 				</Link>

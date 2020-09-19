@@ -1,6 +1,8 @@
 import React from "react";
 import "./add_contact.css";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import EmailAlert from "../components/email_alert";
+import SuccessAlert from "../components/success_alert";
 
 class AddContact extends React.Component {
 	constructor(props) {
@@ -11,6 +13,7 @@ class AddContact extends React.Component {
 			email: "",
 			phone_number: "",
 			error: false,
+			success: true,
 		};
 	}
 
@@ -51,8 +54,8 @@ class AddContact extends React.Component {
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === "Success") {
-					this.props.history.push({
-						pathname: "/contacts",
+					this.setState({
+						success: true,
 					});
 				} else {
 					this.setState({
@@ -72,22 +75,27 @@ class AddContact extends React.Component {
 		});
 	};
 
-	handleBackToList = () => {
+	handleBackButton = () => {
 		this.props.history.push({
 			pathname: "/contacts",
 		});
 	};
 
-	//pending to work with alert
-	handleOpenForm = () => {
+	handleErrorMessage = () => {
 		this.setState({
 			error: false,
-			contactFormOpen: true,
 		});
 	};
 
 	render() {
-		const { first_name, last_name, email, phone_number, error } = this.state;
+		const {
+			first_name,
+			last_name,
+			email,
+			phone_number,
+			error,
+			success,
+		} = this.state;
 
 		return (
 			<div>
@@ -150,31 +158,20 @@ class AddContact extends React.Component {
 						</div>
 					</Form>
 					<div className="other-btn-container">
-						<Button color="danger" onClick={this.handleClearForm}>
-							Clear
-						</Button>
+						<div>
+							<Button color="danger" onClick={this.handleClearForm}>
+								Clear
+							</Button>
+						</div>
+						<div>
+							<Button color="danger" onClick={this.handleBackButton}>
+								Back
+							</Button>
+						</div>
 					</div>
-					<div className="other-btn-container">
-						<Button color="danger" onClick={this.handleBackToList}>
-							Back to List
-						</Button>
-					</div>
-					{
-						// <ConfirmationPopUp
-						// 	success={success}
-						// 	error={error}
-						// 	handleFinalConfirmation={this.handleFinalConfirmation}
-						// >
-						// 	Submit
-						// </ConfirmationPopUp>
-					}
 				</div>
-				{error && (
-					<div>
-						<p> Sorry, this email is already taken, please try again.</p>
-						<button onClick={this.handleOpenForm}>Back</button>
-					</div>
-				)}
+				{error && <EmailAlert />}
+				{success && <SuccessAlert />}
 			</div>
 		);
 	}
