@@ -1,3 +1,71 @@
+* {
+	margin: 8px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
 .App {
-	text-align: center;
+	text-align: left;
+	min-height: 400px;
+	clear: both;
+	overflow: auto;
+}
+
+.page-container {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	min-height: 100vh;
+}
+
+/* .content-wrap {
+	flex: 1;
+	background-image: url("./images/cover.jpg");
+	height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+} */
+
+.content_wrap {
+	display: flex;
+	justify-content: center;
+	margin-top: 120px;
+}
+
+html {
+	box-sizing: border-box;
+	font-size: 16px;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
+	/* margin: 0;
+	padding: 0; */
+	font-weight: bold;
+	font-family: "Montserrat", sans-serif;
+}
+
+ol,
+ul {
+	list-style: none;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
 }

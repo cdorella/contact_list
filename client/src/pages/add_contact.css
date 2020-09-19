@@ -1,0 +1,14 @@
+.add-contact-title {
+	display: flex;
+	justify-content: flex-start;
+	font-weight: bold;
+}
+/* 
+.add-contact-container {
+	display: flex;
+} */
+
+.form-btn-container {
+	display: flex;
+	justify-content: flex-end;
+}

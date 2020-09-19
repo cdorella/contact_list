@@ -1,0 +1,10 @@
+.contact-list-title {
+	display: flex;
+	justify-content: flex-start;
+	font-weight: bold;
+}
+
+.add-new-container {
+	display: flex;
+	justify-content: flex-end;
+}

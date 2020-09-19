@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { ListGroup, ListGroupItem } from "reactstrap";
+import "./contact_list.css";
 
 const ContactList = props => {
 	const [contacts, setContacts] = useState([]);
@@ -13,17 +15,28 @@ const ContactList = props => {
 
 	return (
 		<div>
-			<h2>Contacts:</h2>
+			<h1 className="contact-list-title">Click for contact details:</h1>
 			{contacts.map(contact => (
 				<ul key={contact.id}>
-					<li>
-						{contact.first_name} {contact.last_name}
-						<br></br>
-						<Link to={`/contacts/${contact.id}`}>Details</Link>
-					</li>
+					<ListGroup>
+						<ListGroupItem
+							active
+							tag="a"
+							href={`/contacts/${contact.id}`}
+							action
+							className="btn btn-danger btn stretched-link"
+						>
+							{contact.first_name} {contact.last_name}
+						</ListGroupItem>
+					</ListGroup>
 				</ul>
 			))}
-			<Link to="/contacts/add">Add New Contact</Link>
+
+			<div className="add-new-container">
+				<Link to="/contacts/add" className="btn btn-secondary stretched-link">
+					Add New Contact
+				</Link>
+			</div>
 		</div>
 	);
 };

@@ -1,0 +1,5 @@
+.home-page-title {
+	display: flex;
+	justify-content: flex-start;
+	font-weight: bold;
+}
