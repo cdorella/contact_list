@@ -154,6 +154,14 @@ class ContactDetails extends React.Component {
 			});
 	};
 
+	// pending modal implementation
+	handleOpenForm = () => {
+		this.setState({
+			emailError: false,
+			editDetails: true,
+		});
+	};
+
 	// handleDeleteContact = () => {
 	// 	this.setState({
 	// 		deleteContact: true,
@@ -261,6 +269,7 @@ class ContactDetails extends React.Component {
 				{emailError && (
 					<div>
 						<p>Sorry, this email is already taken, please try again.</p>
+						<button onClick={this.handleOpenForm}>OK</button>
 					</div>
 				)}
 			</div>

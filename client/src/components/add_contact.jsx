@@ -87,6 +87,14 @@ class AddContact extends React.Component {
 		});
 	};
 
+	// pending modal implementation
+	handleOpenForm = () => {
+		this.setState({
+			error: false,
+			contactFormOpen: true,
+		});
+	};
+
 	render() {
 		const {
 			first_name,
@@ -141,17 +149,18 @@ class AddContact extends React.Component {
 							<button>Submit</button>
 						</form>
 						<button onClick={this.handleClearForm}>Clear</button>
-						<button onClick={this.handleCloseForm}>Close</button>
+						<br></br>
+						<button onClick={this.handleCloseForm}>Back to List</button>
 					</div>
 				)}
 
 				{/* MAKE THESE ALERTS WHEN STYLING - CURRENTLY WITH ROUTING NOT ENOUGH TIME TO DISPLAY MESSAGE*/}
-				{success && <p className="error"> Your contact has been saved!</p>}
+				{success && <p> Your contact has been saved!</p>}
 				{error && (
-					<p className="error">
-						{" "}
-						Sorry, this email is already taken, please try again.
-					</p>
+					<div>
+						<p> Sorry, this email is already taken, please try again.</p>
+						<button onClick={this.handleOpenForm}>Back</button>
+					</div>
 				)}
 			</div>
 		);
