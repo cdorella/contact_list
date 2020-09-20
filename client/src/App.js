@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.css";
 import Home from "./pages/home";
 import ContactList from "./pages/contact_list";
 import ContactDetails from "./pages/contact_details";

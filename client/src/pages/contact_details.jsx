@@ -1,5 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { Jumbotron, Button, Form, FormGroup } from "reactstrap";
+import EditDropdown from "../components/edit_dropdown";
 // import DeleteContact from "../components/delete_contact";
 
 class ContactDetails extends React.Component {
@@ -45,26 +47,26 @@ class ContactDetails extends React.Component {
 			});
 	}
 
-	// Show field selection form
+	// Show field selection form // NEW Show Component Edit Dropdown
 	handleEditContact = () => {
 		this.setState({
 			editDetails: true,
 		});
 	};
 
-	// Update selected field on state
-	handleEditSelection = event => {
-		const value = event.target.value;
-		this.setState({
-			selectedField: value,
-		});
-	};
+	// Update selected field on state // NEW handled by the component
+	// handleEditSelection = event => {
+	// 	const value = event.target.value;
+	// 	this.setState({
+	// 		selectedField: value,
+	// 	});
+	// };
 
-	// Show edit form
-	handleEditSubmit = event => {
-		event.preventDefault();
+	// Show edit form // NEW UPDATED
+	handleSelectedField = value => {
 		this.setState({
 			showEditContactForm: true,
+			selectedField: value,
 		});
 	};
 
@@ -162,6 +164,12 @@ class ContactDetails extends React.Component {
 		});
 	};
 
+	handleBackButton = () => {
+		this.props.history.push({
+			pathname: "/contacts",
+		});
+	};
+
 	// handleDeleteContact = () => {
 	// 	this.setState({
 	// 		deleteContact: true,
@@ -201,6 +209,7 @@ class ContactDetails extends React.Component {
 			newValue,
 			// deleteContact,
 		} = this.state;
+
 		return (
 			<div>
 				{idError ? (
@@ -210,41 +219,84 @@ class ContactDetails extends React.Component {
 					</div>
 				) : (
 					<div>
-						<h2>Here is your selected contact details:</h2>
-						<p>First Name: {selectedContact.first_name} </p>
-						<p>Last Name: {selectedContact.last_name} </p>
-						<p>Email: {selectedContact.email} </p>
-						<p>Phone Number: {selectedContact.phone_number}</p>
-						<button onClick={this.handleEditContact}>Edit</button>
-						<button
-							onClick={() => this.handleDeleteContact(selectedContact.id)}
-						>
-							Delete
-						</button>
-						{/* {deleteContact && <DeleteContact id={selectedContact.id} />} */}
+						<h1 className="contact-title">
+							Here is your selected contact details:
+						</h1>
+						<Jumbotron>
+							<p className="lead">First Name: {selectedContact.first_name} </p>
+							<p className="lead">Last Name: {selectedContact.last_name} </p>
+							<p className="lead">Email: {selectedContact.email} </p>
+							<p className="lead">
+								Phone Number: {selectedContact.phone_number}
+							</p>
+							<p className="lead">
+								<Button color="danger" onClick={this.handleEditContact}>
+									Edit
+								</Button>
+								<span></span>
+								<Button
+									color="danger"
+									onClick={() => this.handleDeleteContact(selectedContact.id)}
+								>
+									Delete
+								</Button>
+								<span></span>
+								<Button color="danger" onClick={this.handleBackButton}>
+									Back
+								</Button>
+							</p>
+						</Jumbotron>
 					</div>
 				)}
 				<div>
 					{editDetails && (
 						<div>
-							<h4>
-								<form onSubmit={this.handleEditSubmit}>
-									What would you like to edit for {selectedContact.first_name}{" "}
-									{selectedContact.last_name}?{" "}
-									<select
-										value={selectedField}
-										onChange={this.handleEditSelection}
-									>
-										<option>Select One:</option>
-										<option value="first_name">First Name</option>
-										<option value="last_name">Last Name</option>
-										<option value="email">Email</option>
-										<option value="phone_number">Phone Number</option>
-									</select>
-									<button>Edit</button>
-								</form>
-							</h4>
+							<EditDropdown
+								contact={selectedContact}
+								sendSelection={this.handleSelectedField}
+							/>
+							{/* <h5>
+								<Form onSubmit={this.handleEditSubmit}>
+									<div className="add-contact-container">
+										<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+											What would you like to edit for{" "}
+											{selectedContact.first_name} {selectedContact.last_name}?{" "}
+											<select
+												value={selectedField}
+												onChange={this.handleEditSelection}
+											>
+												<option>Select One:</option>
+												<option value="first_name">First Name</option>
+												<option value="last_name">Last Name</option>
+												<option value="email">Email</option>
+												<option value="phone_number">Phone Number</option>
+											</select>
+											<span></span>
+											<Button color="danger">Go</Button>
+										</FormGroup>
+									</div>
+								</Form>
+							</h5> */}
 						</div>
+						// <div>
+						// 	<h5>
+						// 		<form onSubmit={this.handleEditSubmit}>
+						// 			What would you like to edit for {selectedContact.first_name}{" "}
+						// 			{selectedContact.last_name}?{" "}
+						// 			<select
+						// 				value={selectedField}
+						// 				onChange={this.handleEditSelection}
+						// 			>
+						// 				<option>Select One:</option>
+						// 				<option value="first_name">First Name</option>
+						// 				<option value="last_name">Last Name</option>
+						// 				<option value="email">Email</option>
+						// 				<option value="phone_number">Phone Number</option>
+						// 			</select>
+						// 			<button>Edit</button>
+						// 		</form>
+						// 	</h5>
+						// </div>
 					)}
 				</div>
 				<div>
@@ -277,4 +329,4 @@ class ContactDetails extends React.Component {
 	}
 }
 
-export default ContactDetails;
+export default withRouter(ContactDetails);

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ListGroup, ListGroupItem } from "reactstrap";
+import { ListGroup, ListGroupItem, Nav, NavItem, NavLink } from "reactstrap";
 import "./contact_list.css";
 
 const ContactList = props => {
@@ -15,29 +14,41 @@ const ContactList = props => {
 
 	return (
 		<div>
-			<div className="add-new-top-container">
-				<h1 className="contact-list-title">Click for contact details:</h1>
+			<div>
+				<div>
+					<h1 className="contact-title">Click for contact details:</h1>
+				</div>
+				{contacts.map(contact => (
+					<ul key={contact.id}>
+						<ListGroup>
+							<ListGroupItem
+								active
+								tag="a"
+								href={`/contacts/${contact.id}`}
+								action
+								className="btn btn-danger btn stretched-link"
+							>
+								{contact.first_name} {contact.last_name}
+							</ListGroupItem>
+						</ListGroup>
+					</ul>
+				))}
 			</div>
-			{contacts.map(contact => (
-				<ul key={contact.id}>
-					<ListGroup>
-						<ListGroupItem
-							active
-							tag="a"
-							href={`/contacts/${contact.id}`}
-							action
-							className="btn btn-danger btn stretched-link"
-						>
-							{contact.first_name} {contact.last_name}
-						</ListGroupItem>
-					</ListGroup>
-				</ul>
-			))}
-
 			<div className="add-new-bottom-container">
-				<Link to="/contacts/add" className="btn btn-secondary stretched-link">
-					Add New Contact
-				</Link>
+				<Nav>
+					<NavItem>
+						<NavLink href="/contacts/add" className="btn btn-secondary" active>
+							Add New Contact
+						</NavLink>
+					</NavItem>
+				</Nav>
+				<Nav>
+					<NavItem>
+						<NavLink href="/" className="btn btn-secondary" active>
+							Back to Home
+						</NavLink>
+					</NavItem>
+				</Nav>
 			</div>
 		</div>
 	);

@@ -1,15 +1,10 @@
-.contact-list-title {
+.contact-title {
 	display: flex;
 	justify-content: flex-start;
 	font-weight: bold;
 }
 
-.add-new-top-container {
-	display: flex;
-	justify-content: space-between;
-}
-
 .add-new-bottom-container {
 	display: flex;
-	justify-content: center;
+	justify-content: space-evenly;
 }

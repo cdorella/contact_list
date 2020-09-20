@@ -1,6 +1,7 @@
 import React from "react";
 import "./add_contact.css";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import { withRouter } from "react-router-dom";
 import EmailAlert from "../components/email_alert";
 import SuccessAlert from "../components/success_alert";
 
@@ -13,7 +14,7 @@ class AddContact extends React.Component {
 			email: "",
 			phone_number: "",
 			error: false,
-			success: true,
+			success: false,
 		};
 	}
 
@@ -177,4 +178,4 @@ class AddContact extends React.Component {
 	}
 }
 
-export default AddContact;
+export default withRouter(AddContact);
