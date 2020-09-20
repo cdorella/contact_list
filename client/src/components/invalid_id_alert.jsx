@@ -2,11 +2,11 @@ import React from "react";
 import { Alert } from "reactstrap";
 import { Link } from "react-router-dom";
 
-const SuccessAlert = () => {
+const IdAlert = () => {
 	return (
 		<div>
 			<Alert color="dark">
-				Your contact has been saved successfully!{" "}
+				Oops, this id does not exist!{" "}
 				<Link to="/contacts" className="alert-link">
 					Back to contacts.
 				</Link>{" "}
@@ -15,4 +15,4 @@ const SuccessAlert = () => {
 	);
 };
 
-export default SuccessAlert;
+export default IdAlert;

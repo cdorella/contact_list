@@ -1,25 +1,38 @@
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
-import { Jumbotron, Button, Form, FormGroup } from "reactstrap";
+import {
+	Card,
+	CardText,
+	Row,
+	Col,
+	Button,
+	Form,
+	FormGroup,
+	Input,
+} from "reactstrap";
+import IdAlert from "../components/invalid_id_alert";
 import EditDropdown from "../components/edit_dropdown";
-// import DeleteContact from "../components/delete_contact";
+import EditContactDb from "../components/edit_contact_db";
+import DeleteContactDb from "../components/delete_contact_db";
+import SuccessAlert from "../components/success_alert";
 
 class ContactDetails extends React.Component {
 	constructor(props) {
-		super(props);
+		super();
 		this.state = {
 			selectedContact: {},
-			idError: false,
-			emailError: false,
+			invalidId: false,
+			deleteContact: false,
+			editDetails: false,
+			showEditContactForm: false,
+			editDatabase: false,
+			editSuccess: false,
 			first_name: "",
 			last_name: "",
 			email: "",
 			phone_number: "",
-			editDetails: false,
-			showEditContactForm: false,
+			deleteId: "",
 			selectedField: "",
 			newValue: "",
-			// deleteContact: false,
 		};
 	}
 
@@ -38,7 +51,7 @@ class ContactDetails extends React.Component {
 					});
 				} else {
 					this.setState({
-						idError: true,
+						invalidId: true,
 					});
 				}
 			})
@@ -47,30 +60,33 @@ class ContactDetails extends React.Component {
 			});
 	}
 
-	// Show field selection form // NEW Show Component Edit Dropdown
+	handleBackButton = () => {
+		this.props.history.push({
+			pathname: "/contacts",
+		});
+	};
+
+	handleDeleteContact = id => {
+		this.setState({
+			deleteContact: true,
+			deleteId: id,
+		});
+	};
+
 	handleEditContact = () => {
 		this.setState({
 			editDetails: true,
 		});
 	};
 
-	// Update selected field on state // NEW handled by the component
-	// handleEditSelection = event => {
-	// 	const value = event.target.value;
-	// 	this.setState({
-	// 		selectedField: value,
-	// 	});
-	// };
-
-	// Show edit form // NEW UPDATED
 	handleSelectedField = value => {
 		this.setState({
-			showEditContactForm: true,
 			selectedField: value,
+			showEditContactForm: true,
+			editDetails: false,
 		});
 	};
 
-	// Handle input change edit form
 	handleInputChange = event => {
 		const value = event.target.value;
 		const name = event.target.name;
@@ -79,254 +95,139 @@ class ContactDetails extends React.Component {
 		});
 	};
 
-	// Edit another field
-	handleCloseForm = () => {
-		this.setState({
-			editDetails: false,
-			showEditContactForm: false,
-		});
-	};
-
 	handleFinalEditSubmit = event => {
 		event.preventDefault();
-		this.editContact();
 		this.setState({
-			first_name: "",
-			last_name: "",
-			email: "",
-			phone_number: "",
-			showDetails: false,
-			editDetails: false,
+			showEditContactForm: false,
+			editDatabase: true,
+		});
+	};
+
+	handleCloseForm = () => {
+		this.setState({
 			showEditContactForm: false,
 		});
 	};
 
-	editContact = () => {
-		const {
-			first_name,
-			last_name,
-			email,
-			phone_number,
-			selectedContact,
-		} = this.state;
-
-		let field = {};
-
-		if (first_name !== "") {
-			field.key = "first_name";
-			field.value = first_name;
-		}
-		if (last_name !== "") {
-			field.key = "last_name";
-			field.value = last_name;
-		}
-		if (email !== "") {
-			field.key = "email";
-			field.value = email;
-		}
-		if (phone_number !== "") {
-			field.key = "phone_number";
-			field.value = phone_number;
-		}
-
-		const db_key = field.key;
-		const db_value = field.value;
-
-		fetch(`/api/v1/contacts/${selectedContact.id}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				[db_key]: db_value,
-			}),
-		})
-			.then(response => response.json())
-			.then(response => {
-				if (response.status === "Success") {
-					this.getContactById(selectedContact.id);
-				} else {
-					this.setState({
-						emailError: true,
-					});
-				}
-			})
-			.catch(() => {
-				this.setState({ error: true });
-			});
-	};
-
-	// pending modal implementation
-	handleOpenForm = () => {
+	handleEditSuccess = id => {
 		this.setState({
-			emailError: false,
-			editDetails: true,
+			editSuccess: true,
 		});
-	};
-
-	handleBackButton = () => {
-		this.props.history.push({
-			pathname: "/contacts",
-		});
-	};
-
-	// handleDeleteContact = () => {
-	// 	this.setState({
-	// 		deleteContact: true,
-	// 	});
-	// };
-
-	handleDeleteContact = id => {
-		this.deleteContact(id);
-	};
-
-	deleteContact = id => {
-		fetch(`/api/v1/contacts/${id}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-			.then(response => response.json())
-			.then(() => {
-				this.props.history.push({
-					pathname: "/contacts",
-				});
-			})
-			.catch(() => {
-				this.setState({ error: true });
-			});
+		this.getContactById(id);
 	};
 
 	render() {
 		const {
 			selectedContact,
-			idError,
-			emailError,
+			invalidId,
+			deleteContact,
 			editDetails,
 			showEditContactForm,
+			editDatabase,
+			editSuccess,
+			first_name,
+			last_name,
+			email,
+			phone_number,
+			deleteId,
 			selectedField,
 			newValue,
-			// deleteContact,
 		} = this.state;
 
 		return (
 			<div>
-				{idError ? (
+				{invalidId ? (
 					<div>
-						<p className="error"> Oops, this id does not exist.</p>
-						<Link to="/contacts">Back</Link>
+						<IdAlert />
 					</div>
 				) : (
 					<div>
-						<h1 className="contact-title">
-							Here is your selected contact details:
-						</h1>
-						<Jumbotron>
-							<p className="lead">First Name: {selectedContact.first_name} </p>
-							<p className="lead">Last Name: {selectedContact.last_name} </p>
-							<p className="lead">Email: {selectedContact.email} </p>
-							<p className="lead">
-								Phone Number: {selectedContact.phone_number}
-							</p>
-							<p className="lead">
-								<Button color="danger" onClick={this.handleEditContact}>
-									Edit
-								</Button>
-								<span></span>
-								<Button
-									color="danger"
-									onClick={() => this.handleDeleteContact(selectedContact.id)}
-								>
-									Delete
-								</Button>
-								<span></span>
-								<Button color="danger" onClick={this.handleBackButton}>
-									Back
-								</Button>
-							</p>
-						</Jumbotron>
+						<h1 className="contact-title">Here are the details:</h1>
+						<Row>
+							<Col sm="5">
+								<Card body>
+									<CardText>
+										<p className="lead">
+											First Name: {selectedContact.first_name}{" "}
+										</p>
+										<p className="lead">
+											Last Name: {selectedContact.last_name}{" "}
+										</p>
+										<p className="lead">Email: {selectedContact.email} </p>
+										<p className="lead">
+											Phone Number: {selectedContact.phone_number}
+										</p>
+									</CardText>
+									<p className="lead">
+										<Button color="danger" onClick={this.handleEditContact}>
+											Edit
+										</Button>
+										<span></span>
+										<Button
+											color="danger"
+											onClick={() =>
+												this.handleDeleteContact(selectedContact.id)
+											}
+										>
+											Delete
+										</Button>
+										<span></span>
+										<Button color="danger" onClick={this.handleBackButton}>
+											Back
+										</Button>
+									</p>
+								</Card>
+							</Col>
+							{showEditContactForm && (
+								<Col sm="6">
+									<Card body>
+										<Form inline onSubmit={this.handleFinalEditSubmit}>
+											<CardText className="lead">Edit information:</CardText>
+											<FormGroup>
+												<Input
+													type="text"
+													name={selectedField}
+													defaultValue={newValue}
+													onChange={this.handleInputChange}
+													required
+												/>
+												<span></span>
+												<Button>Submit</Button>
+												<span></span>
+												<Button onClick={this.handleCloseForm}>Close</Button>
+											</FormGroup>
+										</Form>
+									</Card>
+								</Col>
+							)}
+						</Row>
+						<div>
+							{editDetails && (
+								<div>
+									<EditDropdown
+										contact={selectedContact}
+										sendSelection={this.handleSelectedField}
+									/>
+								</div>
+							)}
+						</div>
 					</div>
 				)}
-				<div>
-					{editDetails && (
-						<div>
-							<EditDropdown
-								contact={selectedContact}
-								sendSelection={this.handleSelectedField}
-							/>
-							{/* <h5>
-								<Form onSubmit={this.handleEditSubmit}>
-									<div className="add-contact-container">
-										<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-											What would you like to edit for{" "}
-											{selectedContact.first_name} {selectedContact.last_name}?{" "}
-											<select
-												value={selectedField}
-												onChange={this.handleEditSelection}
-											>
-												<option>Select One:</option>
-												<option value="first_name">First Name</option>
-												<option value="last_name">Last Name</option>
-												<option value="email">Email</option>
-												<option value="phone_number">Phone Number</option>
-											</select>
-											<span></span>
-											<Button color="danger">Go</Button>
-										</FormGroup>
-									</div>
-								</Form>
-							</h5> */}
-						</div>
-						// <div>
-						// 	<h5>
-						// 		<form onSubmit={this.handleEditSubmit}>
-						// 			What would you like to edit for {selectedContact.first_name}{" "}
-						// 			{selectedContact.last_name}?{" "}
-						// 			<select
-						// 				value={selectedField}
-						// 				onChange={this.handleEditSelection}
-						// 			>
-						// 				<option>Select One:</option>
-						// 				<option value="first_name">First Name</option>
-						// 				<option value="last_name">Last Name</option>
-						// 				<option value="email">Email</option>
-						// 				<option value="phone_number">Phone Number</option>
-						// 			</select>
-						// 			<button>Edit</button>
-						// 		</form>
-						// 	</h5>
-						// </div>
-					)}
-				</div>
-				<div>
-					{showEditContactForm && (
-						<div>
-							<form onSubmit={this.handleFinalEditSubmit}>
-								<label>Edit information:</label>
-								<input
-									type="text"
-									name={selectedField}
-									defaultValue={newValue}
-									onChange={this.handleInputChange}
-									required
-								/>
-								<br></br>
-								<button>Submit</button>
-							</form>
-							<button onClick={this.handleCloseForm}>Close</button>
-						</div>
-					)}
-				</div>
-				{emailError && (
-					<div>
-						<p>Sorry, this email is already taken, please try again.</p>
-						<button onClick={this.handleOpenForm}>OK</button>
-					</div>
+				{editDatabase && (
+					<EditContactDb
+						contact={selectedContact}
+						first_name={first_name}
+						last_name={last_name}
+						email={email}
+						phone_number={phone_number}
+						sendEditSuccess={this.handleEditSuccess}
+					/>
 				)}
+				{editSuccess && <SuccessAlert />}
+				{deleteContact && <DeleteContactDb id={deleteId} />}
 			</div>
 		);
 	}
 }
 
-export default withRouter(ContactDetails);
+export default ContactDetails;

@@ -1,9 +1,8 @@
 import React from "react";
 import "./add_contact.css";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
-import { withRouter } from "react-router-dom";
-import EmailAlert from "../components/email_alert";
 import SuccessAlert from "../components/success_alert";
+import AddContactDb from "../components/add_contact_db";
 
 class AddContact extends React.Component {
 	constructor(props) {
@@ -13,8 +12,9 @@ class AddContact extends React.Component {
 			last_name: "",
 			email: "",
 			phone_number: "",
-			error: false,
-			success: false,
+			addDatabase: false,
+			saveError: false,
+			saveSuccess: false,
 		};
 	}
 
@@ -28,43 +28,9 @@ class AddContact extends React.Component {
 
 	handleSubmit = event => {
 		event.preventDefault();
-		this.addContact();
 		this.setState({
-			first_name: "",
-			last_name: "",
-			email: "",
-			phone_number: "",
+			addDatabase: true,
 		});
-	};
-
-	addContact = () => {
-		const { first_name, last_name, email, phone_number } = this.state;
-
-		fetch("/api/v1/contacts", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				first_name: first_name,
-				last_name: last_name,
-				email: email,
-				phone_number: phone_number,
-			}),
-		})
-			.then(response => response.json())
-			.then(response => {
-				if (response.status === "Success") {
-					this.setState({
-						success: true,
-					});
-				} else {
-					this.setState({
-						error: true,
-					});
-				}
-			})
-			.catch(error => console.log(error));
 	};
 
 	handleClearForm = () => {
@@ -82,9 +48,13 @@ class AddContact extends React.Component {
 		});
 	};
 
-	handleErrorMessage = () => {
+	handleAddSuccess = () => {
 		this.setState({
-			error: false,
+			first_name: "",
+			last_name: "",
+			email: "",
+			phone_number: "",
+			saveSuccess: true,
 		});
 	};
 
@@ -94,8 +64,8 @@ class AddContact extends React.Component {
 			last_name,
 			email,
 			phone_number,
-			error,
-			success,
+			addDatabase,
+			saveSuccess,
 		} = this.state;
 
 		return (
@@ -171,11 +141,19 @@ class AddContact extends React.Component {
 						</div>
 					</div>
 				</div>
-				{error && <EmailAlert />}
-				{success && <SuccessAlert />}
+				{addDatabase && (
+					<AddContactDb
+						first_name={first_name}
+						last_name={last_name}
+						email={email}
+						phone_number={phone_number}
+						sendAddSuccess={this.handleAddSuccess}
+					/>
+				)}
+				{saveSuccess && <SuccessAlert />}
 			</div>
 		);
 	}
 }
 
-export default withRouter(AddContact);
+export default AddContact;

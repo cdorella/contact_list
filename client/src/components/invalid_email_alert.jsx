@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert } from "reactstrap";
 
-const EmailAlert = props => {
+const EmailAlert = () => {
 	const [visible, setVisible] = useState(true);
 
 	const onDismiss = () => {

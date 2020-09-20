@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ListGroup, ListGroupItem, Nav, NavItem, NavLink } from "reactstrap";
 import "./contact_list.css";
 
-const ContactList = props => {
+const ContactList = () => {
 	const [contacts, setContacts] = useState([]);
 
 	useEffect(() => {
