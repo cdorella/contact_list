@@ -14,7 +14,7 @@ class EditContactDb extends React.Component {
 	}
 
 	editContact = () => {
-		const { first_name, last_name, email, phone_number, contact } = this.props;
+		const { id, first_name, last_name, email, phone_number } = this.props;
 
 		let field = {};
 
@@ -37,7 +37,6 @@ class EditContactDb extends React.Component {
 
 		const db_key = field.key;
 		const db_value = field.value;
-		const id = contact.id;
 
 		fetch(`/api/v1/contacts/${id}`, {
 			method: "PUT",
@@ -51,7 +50,7 @@ class EditContactDb extends React.Component {
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === "Success") {
-					this.props.sendEditSuccess(id);
+					this.props.sendEditSuccess();
 				} else {
 					this.setState({
 						emailError: true,

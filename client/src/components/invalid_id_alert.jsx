@@ -6,7 +6,7 @@ const IdAlert = () => {
 	return (
 		<div>
 			<Alert color="dark">
-				Oops, this page does not exist!{" "}
+				Oops, this contact does not exist!{" "}
 				<Link to="/contacts" className="alert-link">
 					Back to main list.
 				</Link>{" "}

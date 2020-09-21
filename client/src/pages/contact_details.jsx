@@ -13,16 +13,20 @@ import IdAlert from "../components/invalid_id_alert";
 import EditDropdown from "../components/edit_dropdown";
 import EditContactDb from "../components/edit_contact_db";
 import DeleteContactDb from "../components/delete_contact_db";
-import SuccessAlert from "../components/success_alert";
+import GetContactById from "../components/get_contact_by_id";
 
 class ContactDetails extends React.Component {
 	constructor(props) {
 		super();
 		this.state = {
-			selectedContact: {},
+			id: "",
+			getContactById: false,
 			invalidId: false,
+			selectedContact: {},
 			deleteContact: false,
 			editDetails: false,
+			selectedField: "",
+			newValue: "",
 			showEditContactForm: false,
 			editDatabase: false,
 			editSuccess: false,
@@ -30,32 +34,27 @@ class ContactDetails extends React.Component {
 			last_name: "",
 			email: "",
 			phone_number: "",
-			deleteId: "",
-			selectedField: "",
-			newValue: "",
 		};
 	}
 
 	componentDidMount() {
 		const { id } = this.props.match.params;
-		this.getContactById(id);
+		this.setState({
+			id: id,
+			getContactById: true,
+		});
 	}
 
-	getContactById = id => {
-		fetch(`/api/v1/contacts/${id}`)
-			.then(response => response.json())
-			.then(response => {
-				if (response.status === "Success") {
-					this.setState({
-						selectedContact: response.data,
-					});
-				} else {
-					this.setState({
-						invalidId: true,
-					});
-				}
-			})
-			.catch(error => console.log(error));
+	handleInvalidId = () => {
+		this.setState({
+			invalidId: true,
+		});
+	};
+
+	handleContactDetails = data => {
+		this.setState({
+			selectedContact: data,
+		});
 	};
 
 	handleBackButton = () => {
@@ -64,10 +63,9 @@ class ContactDetails extends React.Component {
 		});
 	};
 
-	handleDeleteContact = id => {
+	handleDeleteContact = () => {
 		this.setState({
 			deleteContact: true,
-			deleteId: id,
 		});
 	};
 
@@ -107,33 +105,37 @@ class ContactDetails extends React.Component {
 		});
 	};
 
-	handleEditSuccess = id => {
-		this.setState({
-			editSuccess: true,
-		});
-		this.getContactById(id);
+	handleEditSuccess = () => {
+		window.location.reload();
 	};
 
 	render() {
 		const {
-			selectedContact,
+			id,
+			getContactById,
 			invalidId,
+			selectedContact,
 			deleteContact,
 			editDetails,
+			selectedField,
+			newValue,
 			showEditContactForm,
 			editDatabase,
-			editSuccess,
 			first_name,
 			last_name,
 			email,
 			phone_number,
-			deleteId,
-			selectedField,
-			newValue,
 		} = this.state;
 
 		return (
 			<div>
+				{getContactById && (
+					<GetContactById
+						id={id}
+						contactDetails={this.handleContactDetails}
+						invalidId={this.handleInvalidId}
+					/>
+				)}
 				{invalidId ? (
 					<>
 						<IdAlert />
@@ -155,12 +157,7 @@ class ContactDetails extends React.Component {
 											Edit
 										</Button>
 										<span></span>
-										<Button
-											color="danger"
-											onClick={() =>
-												this.handleDeleteContact(selectedContact.id)
-											}
-										>
+										<Button color="danger" onClick={this.handleDeleteContact}>
 											Delete
 										</Button>
 										<span></span>
@@ -205,7 +202,7 @@ class ContactDetails extends React.Component {
 				)}
 				{editDatabase && (
 					<EditContactDb
-						contact={selectedContact}
+						id={id}
 						first_name={first_name}
 						last_name={last_name}
 						email={email}
@@ -213,8 +210,7 @@ class ContactDetails extends React.Component {
 						sendEditSuccess={this.handleEditSuccess}
 					/>
 				)}
-				{editSuccess && <SuccessAlert />}
-				{deleteContact && <DeleteContactDb id={deleteId} />}
+				{deleteContact && <DeleteContactDb id={id} />}
 			</div>
 		);
 	}
