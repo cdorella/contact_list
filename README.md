@@ -2,10 +2,10 @@
 
 A simple React on Rails CRUD contact list app, built with:
 
-[Ruby on Rails API](https://api.rubyonrails.org/)
-[Create React App](https://create-react-app.dev/)
-[MySQL](https://dev.mysql.com/doc/)
-[Reactstrap](https://reactstrap.github.io/)
+- [Ruby on Rails API](https://api.rubyonrails.org/)
+- [Create React App](https://create-react-app.dev/)
+- [MySQL](https://dev.mysql.com/doc/)
+- [Reactstrap](https://reactstrap.github.io/)
 
 <img src="client/src/images/home_page.JPG" >
 
