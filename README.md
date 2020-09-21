@@ -1,24 +1,42 @@
-# README
+# The Backstage Contact List
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A simple React on Rails contact list CRUD app, built with:
 
-Things you may want to cover:
+[Ruby on Rails API](https://api.rubyonrails.org/):
 
-* Ruby version
+[Create React App](https://create-react-app.dev/):
 
-* System dependencies
+[MySQL](https://dev.mysql.com/doc/):
 
-* Configuration
+[Reactstrap](https://reactstrap.github.io/):
 
-* Database creation
+## Setup
 
-* Database initialization
+### Dependencies
 
-* How to run the test suite
+- Run `bundle install` on the root folder to install dependencies related to Rails.
 
-* Services (job queues, cache servers, search engines, etc.)
+- `cd client` and run `yarn` to install dependencies related to React.
 
-* Deployment instructions
+- As Rails will be running on port 3001, check that you have the following line in the `client/package.json` folder:
 
-* ...
+`"proxy": "http://localhost:3001"`
+
+### Database Prep
+
+- In `config/database.yml` a database called "contact_list" was already added.
+
+- Create a `.env` file in the root folder of this repository and add your MySQL username and password to it:
+
+```bash
+  export DB_USER=
+  export DB_PASSWORD=
+```
+
+- Run `rails db:create`, `rails db:migrate` and `rails db:seed` in the root folder of this repository to create the database and populate it with some dummy data.
+
+### Run Your Development Servers
+
+- Run Rails s -p 3001 on the root folder to start your API. You can test it in http://localhost:3001
+
+- In another tab, cd client and run yarn start. You can test your client app in http://localhost:3000

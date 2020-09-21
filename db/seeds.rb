@@ -15,7 +15,7 @@ Contact.create([{
                 {
                   first_name: 'Florence',
                   last_name: 'Welch',
-                  email: 'florenceandthemachine@email.com',
+                  email: 'floandthemachine@email.com',
                   phone_number: '633 555 443'
                 },
                 {
