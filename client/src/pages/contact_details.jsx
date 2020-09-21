@@ -41,7 +41,7 @@ class ContactDetails extends React.Component {
 		this.getContactById(id);
 	}
 
-	getContactById(id) {
+	getContactById = id => {
 		fetch(`/api/v1/contacts/${id}`)
 			.then(response => response.json())
 			.then(response => {
@@ -55,10 +55,8 @@ class ContactDetails extends React.Component {
 					});
 				}
 			})
-			.catch(() => {
-				this.setState({ error: true });
-			});
-	}
+			.catch(error => console.log(error));
+	};
 
 	handleBackButton = () => {
 		this.props.history.push({
@@ -137,28 +135,22 @@ class ContactDetails extends React.Component {
 		return (
 			<div>
 				{invalidId ? (
-					<div>
+					<>
 						<IdAlert />
-					</div>
+					</>
 				) : (
-					<div>
-						<h1 className="contact-title">Here are the details:</h1>
+					<>
+						<h1 className="contact-title">Contact Details:</h1>
 						<Row>
 							<Col sm="5">
-								<Card body>
+								<Card body style={{ fontSize: "20px" }}>
+									<CardText>First Name: {selectedContact.first_name}</CardText>
+									<CardText>Last Name: {selectedContact.last_name}</CardText>
+									<CardText>Email: {selectedContact.email}</CardText>
 									<CardText>
-										<p className="lead">
-											First Name: {selectedContact.first_name}{" "}
-										</p>
-										<p className="lead">
-											Last Name: {selectedContact.last_name}{" "}
-										</p>
-										<p className="lead">Email: {selectedContact.email} </p>
-										<p className="lead">
-											Phone Number: {selectedContact.phone_number}
-										</p>
+										Phone Number: {selectedContact.phone_number}
 									</CardText>
-									<p className="lead">
+									<p>
 										<Button color="danger" onClick={this.handleEditContact}>
 											Edit
 										</Button>
@@ -180,9 +172,9 @@ class ContactDetails extends React.Component {
 							</Col>
 							{showEditContactForm && (
 								<Col sm="6">
-									<Card body>
+									<Card body style={{ fontSize: "20px" }}>
 										<Form inline onSubmit={this.handleFinalEditSubmit}>
-											<CardText className="lead">Edit information:</CardText>
+											<CardText>Edit information:</CardText>
 											<FormGroup>
 												<Input
 													type="text"
@@ -201,17 +193,15 @@ class ContactDetails extends React.Component {
 								</Col>
 							)}
 						</Row>
-						<div>
-							{editDetails && (
-								<div>
-									<EditDropdown
-										contact={selectedContact}
-										sendSelection={this.handleSelectedField}
-									/>
-								</div>
-							)}
-						</div>
-					</div>
+						{editDetails && (
+							<>
+								<EditDropdown
+									contact={selectedContact}
+									sendSelection={this.handleSelectedField}
+								/>
+							</>
+						)}
+					</>
 				)}
 				{editDatabase && (
 					<EditContactDb

@@ -1,14 +1,14 @@
 import React from "react";
-import { Alert } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Alert } from "reactstrap";
 
 const IdAlert = () => {
 	return (
 		<div>
 			<Alert color="dark">
-				Oops, this id does not exist!{" "}
+				Oops, this page does not exist!{" "}
 				<Link to="/contacts" className="alert-link">
-					Back to contacts.
+					Back to main list.
 				</Link>{" "}
 			</Alert>
 		</div>

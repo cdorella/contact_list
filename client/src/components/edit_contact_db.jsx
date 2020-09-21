@@ -3,7 +3,7 @@ import EmailAlert from "./invalid_email_alert";
 
 class EditContactDb extends React.Component {
 	constructor(props) {
-		super(props);
+		super();
 		this.state = {
 			emailError: false,
 		};

@@ -1,14 +1,14 @@
 import React from "react";
-import { Alert } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Alert } from "reactstrap";
 
 const SuccessAlert = () => {
 	return (
 		<div>
 			<Alert color="dark">
-				Your contact has been saved successfully!{" "}
+				Artist has been saved successfully!{" "}
 				<Link to="/contacts" className="alert-link">
-					Back to contacts.
+					Back to main list.
 				</Link>{" "}
 			</Alert>
 		</div>

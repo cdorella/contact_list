@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ListGroup, ListGroupItem, Nav, NavItem, NavLink } from "reactstrap";
 import "./contact_list.css";
+import { ListGroup, ListGroupItem, Nav, NavItem, NavLink } from "reactstrap";
 
 const ContactList = () => {
 	const [contacts, setContacts] = useState([]);
@@ -15,30 +15,28 @@ const ContactList = () => {
 	return (
 		<div>
 			<div>
-				<div>
-					<h1 className="contact-title">Click for contact details:</h1>
-				</div>
-				{contacts.map(contact => (
-					<ul key={contact.id}>
-						<ListGroup>
-							<ListGroupItem
-								active
-								tag="a"
-								href={`/contacts/${contact.id}`}
-								action
-								className="btn btn-danger btn stretched-link"
-							>
-								{contact.first_name} {contact.last_name}
-							</ListGroupItem>
-						</ListGroup>
-					</ul>
-				))}
+				<h1 className="contact-title">List of Artists:</h1>
 			</div>
+			{contacts.map(contact => (
+				<ul key={contact.id}>
+					<ListGroup>
+						<ListGroupItem
+							active
+							tag="a"
+							href={`/contacts/${contact.id}`}
+							action
+							className="btn btn-danger btn stretched-link"
+						>
+							{contact.first_name} {contact.last_name}
+						</ListGroupItem>
+					</ListGroup>
+				</ul>
+			))}
 			<div className="add-new-bottom-container">
 				<Nav>
 					<NavItem>
 						<NavLink href="/contacts/add" className="btn btn-secondary" active>
-							Add New Contact
+							Add New Artist
 						</NavLink>
 					</NavItem>
 				</Nav>

@@ -1,7 +1,7 @@
 import React from "react";
 import "./home.css";
-import img from "../images/man-dancing.png";
 import { Nav, NavItem, NavLink } from "reactstrap";
+import img from "../images/man-dancing.png";
 
 const Home = () => {
 	return (
@@ -21,21 +21,22 @@ const Home = () => {
 					alt="man-dancing-illustration"
 				></img>
 			</div>
-
 			<h6>
 				A React on Rails Project by
 				<a
 					className="home-page-link"
 					href="https://www.carolinadorella.com/"
 					target="_blank"
+					rel="noopener noreferrer"
 				>
 					Carolina Dorella
 				</a>
-				// Illustration by
+				| Illustration by
 				<a
 					className="home-page-link"
 					href="https://absurd.design/"
 					target="_blank"
+					rel="noopener noreferrer"
 				>
 					Absurd Design
 				</a>

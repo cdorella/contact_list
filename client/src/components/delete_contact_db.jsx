@@ -3,7 +3,7 @@ import SuccessDelete from "./success_delete";
 
 class DeleteContactDb extends React.Component {
 	constructor(props) {
-		super(props);
+		super();
 		this.state = {
 			deleteSuccess: false,
 		};

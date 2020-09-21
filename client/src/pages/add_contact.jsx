@@ -13,7 +13,6 @@ class AddContact extends React.Component {
 			email: "",
 			phone_number: "",
 			addDatabase: false,
-			saveError: false,
 			saveSuccess: false,
 		};
 	}
@@ -71,7 +70,7 @@ class AddContact extends React.Component {
 		return (
 			<div>
 				<div>
-					<h1 className="add-contact-title">New Contact:</h1>
+					<h1 className="add-contact-title">New Artist:</h1>
 					<Form onSubmit={this.handleSubmit}>
 						<div className="add-contact-container">
 							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
